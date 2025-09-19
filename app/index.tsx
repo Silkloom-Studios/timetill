@@ -1,25 +1,32 @@
 import { useEvents } from "@/components/storage/EventsProvider";
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 
 export default function Eventlist() {
   const { eventList } = useEvents();
 
+  //TODO: order by number accending
+
   return (
     <View>
-      <Text>This is the main page</Text>
+      <View>
+        <Link href="/event-form" style={{ fontSize: 40 }}>
+          +
+        </Link>
+      </View>
       <View>
         {eventList &&
           eventList.map((event) => {
             return (
               <View key={event.date}>
-                <Text>{event.title}</Text>
                 <Link
                   href={{
                     pathname: "/event/[date]",
                     params: { date: event.date, title: event.title, subtitle: event.subtitle },
                   }}
-                ></Link>
+                >
+                  {event.title}
+                </Link>
               </View>
             );
           })}

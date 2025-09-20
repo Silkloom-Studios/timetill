@@ -16,7 +16,7 @@ export default function RootLayout() {
           <Stack>
             <Stack.Screen name="index" options={{ headerShown: SHOW_HEADER }} />
             <Stack.Screen
-              name="event/[date]"
+              name="event/[id]"
               options={{ headerShown: SHOW_HEADER }}
               // options={({ route }) => {
               //   const params = route.params as { date: string };

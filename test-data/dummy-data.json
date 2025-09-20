@@ -1,31 +1,37 @@
 {
   "events": [
     {
+      "id": 1839753600000,
       "title": "Spring Countdown",
       "subtitle": "Marking a fresh start in April 2028",
       "date": 1839753600000
     },
     {
+      "id": 1914844800000,
       "title": "Future Milestone",
       "subtitle": "A big goal set for September 2030",
       "date": 1914844800000
     },
     {
+      "id": 2249462400000,
       "title": "Distant Horizons",
       "subtitle": "A once-in-a-lifetime event in August 2041",
       "date": 2249462400000
     },
     {
+      "id": 1764547200000,
       "title": "Winter Kickoff",
       "subtitle": "The first day of December 2025 celebration",
       "date": 1764547200000
     },
     {
+      "id": 1759276800000,
       "title": "Autumn Marker",
       "subtitle": "Welcoming October 2025 with new plans",
       "date": 1759276800000
     },
     {
+      "id": 1826486400000,
       "title": "Season of Thanks",
       "subtitle": "Special gathering on November 17, 2027",
       "date": 1826486400000

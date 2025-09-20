@@ -18,11 +18,11 @@ export default function Eventlist() {
         {eventList &&
           eventList.map((event) => {
             return (
-              <View key={event.date}>
+              <View key={event.id}>
                 <Link
                   href={{
-                    pathname: "/event/[date]",
-                    params: { date: event.date, title: event.title, subtitle: event.subtitle },
+                    pathname: "/event/[id]",
+                    params: { id: event.id, date: event.date, title: event.title, subtitle: event.subtitle },
                   }}
                 >
                   {event.title}

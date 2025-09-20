@@ -6,14 +6,15 @@ const EVENTS_KEY = "events";
 
 export type ItemWithTimestamp = {
   title: string;
-  subtitle: string;
-  date: number;
+  date: string;
+  id: number;
+  subtitle?: string;
 };
 
 type EventsContextType<T extends ItemWithTimestamp> = {
   eventList: T[];
-  addEvent: (item: Omit<T, "id">) => Promise<void>;
-  removeEvent: (id: string) => Promise<void>;
+  addEvent: (item: Omit<T, "id">) => Promise<boolean>;
+  removeEvent: (id: number) => Promise<boolean>;
 };
 
 const EventsContext = createContext<EventsContextType<any> | undefined>(undefined);
@@ -33,18 +34,18 @@ export function EventsProvider<T extends ItemWithTimestamp>({ children }: Events
   }, []);
 
   // Add item
-  const addEvent = async (item: Omit<T, "id">) => {
-    const newItem = { ...item, id: Date.now().toString() } as T;
+  const addEvent = async (item: T) => {
+    const newItem = { ...item } as T;
     const updatedList = [...eventList, newItem];
     setEventList(updatedList);
-    await storeData(EVENTS_KEY, updatedList);
+    return await storeData(EVENTS_KEY, updatedList);
   };
 
   // Remove item
-  const removeEvent = async (id: string) => {
+  const removeEvent = async (id: number) => {
     const updatedList = eventList.filter((i) => i.id !== id);
     setEventList(updatedList);
-    await storeData(EVENTS_KEY, updatedList);
+    return await storeData(EVENTS_KEY, updatedList);
   };
 
   return <EventsContext.Provider value={{ eventList, addEvent, removeEvent }}>{children}</EventsContext.Provider>;

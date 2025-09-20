@@ -10,7 +10,7 @@ export default function Eventlist() {
   return (
     <View>
       <View>
-        <Link href="/event-form" style={{ fontSize: 40 }}>
+        <Link href="/create" style={{ fontSize: 40 }}>
           +
         </Link>
       </View>

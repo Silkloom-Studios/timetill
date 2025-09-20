@@ -1,5 +1,6 @@
 import EventForm from "@/components/forms/EventForm";
 import { useEvents } from "@/components/storage/EventsProvider";
+import { parseId } from "@/utils/utils";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
@@ -26,7 +27,7 @@ export type EventDataType = {
 
 export default function EventDetail() {
   const { id } = useLocalSearchParams();
-  console.log("id", id);
+
   const { getEvent } = useEvents();
 
   const [eventData, setEventData] = useState<EventDataType | undefined>(undefined);
@@ -39,7 +40,7 @@ export default function EventDetail() {
         setEventData(selectedEvent);
       }
     }
-  }, [id]);
+  }, [id, getEvent]);
 
   return (
     <View>
@@ -50,15 +51,4 @@ export default function EventDetail() {
       </View>
     </View>
   );
-}
-
-const paramStr = (param: string | string[]) => {
-  return Array.isArray(param) ? param[0] : param;
-};
-
-function parseId(id?: string | string[]): number | undefined {
-  if (!id) return undefined;
-  const strId = paramStr(id);
-  const num = Number(strId);
-  return isNaN(num) ? undefined : num;
 }

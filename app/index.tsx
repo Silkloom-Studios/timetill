@@ -33,7 +33,6 @@ export default function Eventlist() {
               </View>
             );
           })}
-        <Link href="/create">Add new event!</Link>
       </View>
     </View>
   );

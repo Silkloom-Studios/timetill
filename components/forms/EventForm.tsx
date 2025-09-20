@@ -1,4 +1,5 @@
 import { useEvents } from "@/components/storage/EventsProvider";
+import { formatLocalDate, parseLocalDate } from "@/utils/dates";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Link } from "expo-router";
 import { useState } from "react";
@@ -157,18 +158,6 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
       </View>
     </View>
   );
-}
-
-function formatLocalDate(date: Date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
-
-function parseLocalDate(dateStr: string) {
-  const [year, month, day] = dateStr.split("-").map(Number);
-  return new Date(year, month - 1, day, 12, 0, 0); // noon local time
 }
 
 const styles = StyleSheet.create({

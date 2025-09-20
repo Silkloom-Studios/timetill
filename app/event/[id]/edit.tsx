@@ -5,19 +5,6 @@ import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
 
-/*
-**
-TODO:
-1. check if date has passed or is today
-  a. show celebration message
-  b. handle time calculations
-2. check how many years left
-  a. months
-  b. days
-  c. hours
-**
-*/
-
 export type EventDataType = {
   title?: string;
   date?: string;

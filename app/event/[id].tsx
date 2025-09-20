@@ -1,3 +1,4 @@
+import Countdown from "@/components/countdowns/Countdown";
 import { useEvents } from "@/components/storage/EventsProvider";
 import { parseId } from "@/utils/utils";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
@@ -7,7 +8,8 @@ import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 /*
 **
 TODO:
-1. check if date has passed or is today
+2. create a date object for the string value of the date
+1. check if date has passed or is today of if date is in future
   a. show celebration message
   b. handle time calculations
 2. check how many years left
@@ -18,9 +20,9 @@ TODO:
 */
 
 export type EventDataType = {
-  title?: string;
-  date?: string;
-  id?: number;
+  title: string;
+  date: string;
+  id: number;
   subtitle?: string;
 };
 
@@ -60,9 +62,8 @@ export default function EventDetail() {
         <View>
           <Text>{eventData.title}</Text>
           <Text>{eventData.subtitle}</Text>
-          <Text>{eventData.date}</Text>
+          <Countdown date={eventData.date} />
           <Link href={`/event/${id}/edit`}>Edit Event</Link>
-          <Link href="..">Go back to Home screen!</Link>
           <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(true)}>
             <Text style={styles.textStyle}>Trash</Text>
           </Pressable>

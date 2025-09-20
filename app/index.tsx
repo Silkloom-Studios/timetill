@@ -22,9 +22,10 @@ export default function Eventlist() {
                 <Text>{event.title}</Text>
                 <Text>{event.date}</Text>
                 <Link
+                  style={{ color: "red" }}
                   href={{
                     pathname: "/event/[id]",
-                    params: { id: event.id, date: event.date, title: event.title, subtitle: event.subtitle },
+                    params: { id: event.id },
                   }}
                 >
                   {event.title}
@@ -32,7 +33,7 @@ export default function Eventlist() {
               </View>
             );
           })}
-        <Link href="/event-form">Add new event!</Link>
+        <Link href="/create">Add new event!</Link>
       </View>
     </View>
   );

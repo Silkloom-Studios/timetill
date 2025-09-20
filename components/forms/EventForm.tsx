@@ -9,21 +9,31 @@ type FormDataType = {
   subtitle?: string;
 };
 
-export default function EventForm() {
-  const { addEvent } = useEvents();
+interface EventFormProps {
+  date?: string;
+  title?: string;
+  subtitle?: string;
+  id?: number;
+}
+
+export default function EventForm({ date, title, subtitle, id }: EventFormProps) {
+  const { addEvent, updateEvent } = useEvents();
 
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(today.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
+
+  const [isEdit, setIsEdit] = useState<boolean>(id ? true : false);
+
   const [formData, setFormData] = useState<FormDataType>({
-    date: formatLocalDate(tomorrow),
-    title: undefined,
-    subtitle: undefined,
+    date: date || formatLocalDate(tomorrow),
+    title: title || undefined,
+    subtitle: subtitle || undefined,
   });
   const [error, setError] = useState<{ error: boolean; message: string }>({
-    error: true,
-    message: "This is a test error please ignore",
+    error: false,
+    message: "No error here!",
   });
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [modalVisible, setModalVisible] = useState<boolean>(false);
@@ -44,11 +54,19 @@ export default function EventForm() {
     if (formData.date && formData.title) {
       const tomorrowStr = formatLocalDate(tomorrow);
       if (formData.date >= tomorrowStr) {
-        const newEvent = { title: formData.title, id: Date.now(), date: formData.date, ...formData };
-        const savedEvent = await addEvent(newEvent);
+        const newEvent = { title: formData.title, date: formData.date, ...formData };
+        let savedEvent = false;
+        if (id && isEdit) {
+          console.log("has an id");
+          savedEvent = await updateEvent(id, { ...newEvent, id: id });
+        } else {
+          console.log("has no id present");
+          savedEvent = await addEvent({ ...newEvent, id: Date.now() });
+        }
+
         if (savedEvent) {
           setModalVisible(true);
-          setError({ error: true, message: "No error here!" });
+          setError({ error: false, message: "No error here!" });
         } else {
           setError({ error: true, message: "unable to store new event" });
         }
@@ -63,11 +81,13 @@ export default function EventForm() {
 
   const handleModalClose = () => {
     setModalVisible(!modalVisible);
-    setFormData({
-      date: formatLocalDate(tomorrow),
-      title: undefined,
-      subtitle: undefined,
-    });
+    if (!isEdit) {
+      setFormData({
+        date: formatLocalDate(tomorrow),
+        title: undefined,
+        subtitle: undefined,
+      });
+    }
   };
 
   return (
@@ -85,9 +105,9 @@ export default function EventForm() {
             <View style={styles.modalView}>
               <Text style={styles.modalText}>Success!</Text>
               <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
-                <Text style={styles.textStyle}>Create new</Text>
+                <Text style={styles.textStyle}>{isEdit ? "continue editing" : "create new"}</Text>
               </Pressable>
-              <Link href="..">See All</Link>
+              <Link href="..">{isEdit ? "return to event" : "see all events"}</Link>
             </View>
           </View>
         </Modal>
@@ -121,7 +141,7 @@ export default function EventForm() {
         />
         <View style={{ marginBottom: 12 }}>
           <DateTimePicker
-            value={formData.date ? new Date(formData.date) : tomorrow}
+            value={formData.date ? parseLocalDate(formData.date) : tomorrow}
             mode="date"
             display="default"
             onChange={handleDateChange}
@@ -135,9 +155,6 @@ export default function EventForm() {
         ) : null}
         <Button title="Save" disabled={!formData.title || !formData.date || isLoading} onPress={handleSubmit} />
       </View>
-      <View>
-        <Link href="..">Go back to Home screen!</Link>
-      </View>
     </View>
   );
 }
@@ -147,6 +164,11 @@ function formatLocalDate(date: Date) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function parseLocalDate(dateStr: string) {
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day, 12, 0, 0); // noon local time
 }
 
 const styles = StyleSheet.create({

@@ -17,13 +17,25 @@ export default function RootLayout() {
             <Stack.Screen name="index" options={{ headerShown: SHOW_HEADER }} />
             <Stack.Screen
               name="event/[id]"
-              options={{ headerShown: SHOW_HEADER }}
-              // options={({ route }) => {
-              //   const params = route.params as { date: string };
-              //   return { headerShown: SHOW_HEADER, title: params.date ?? "Event Details" };
-              // }}
+              options={({ route }) => {
+                const params = route.params as { id: string };
+                return {
+                  headerShown: SHOW_HEADER,
+                  title: params?.id ?? "Event Details",
+                };
+              }}
             />
-            <Stack.Screen name="event-form" options={{ headerShown: SHOW_HEADER }} />
+            <Stack.Screen name="create" options={{ headerShown: SHOW_HEADER }} />
+            <Stack.Screen
+              name="event/[id]/edit"
+              options={({ route }) => {
+                const params = route.params as { id: number };
+                return {
+                  headerShown: SHOW_HEADER,
+                  title: "Edit " + (params?.id ?? "Event"),
+                };
+              }}
+            />
           </Stack>
 
           <StatusBar style="auto" />

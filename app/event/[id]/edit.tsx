@@ -1,7 +1,9 @@
+import EventForm from "@/components/forms/EventForm";
 import { useEvents } from "@/components/storage/EventsProvider";
 import { Link, useLocalSearchParams } from "expo-router";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
+
 /*
 **
 TODO:
@@ -24,6 +26,7 @@ export type EventDataType = {
 
 export default function EventDetail() {
   const { id } = useLocalSearchParams();
+  console.log("id", id);
   const { getEvent } = useEvents();
 
   const [eventData, setEventData] = useState<EventDataType | undefined>(undefined);
@@ -37,17 +40,14 @@ export default function EventDetail() {
       }
     }
   }, [id]);
+
   return (
     <View>
-      {eventData ? (
-        <View>
-          <Text>{eventData.title}</Text>
-          <Text>{eventData.subtitle}</Text>
-          <Text>{eventData.date}</Text>
-          <Link href={`/event/${id}/edit`}>Edit Event</Link>
-          <Link href="..">Go back to Home screen!</Link>
-        </View>
-      ) : null}
+      <View>
+        <Text>Edit</Text>
+        {eventData && <EventForm {...eventData} />}
+        <Link href="..">Go back to Event!</Link>
+      </View>
     </View>
   );
 }

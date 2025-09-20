@@ -5,20 +5,6 @@ import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 
-/*
-**
-TODO:
-2. create a date object for the string value of the date
-1. check if date has passed or is today of if date is in future
-  a. show celebration message
-  b. handle time calculations
-2. check how many years left
-  a. months
-  b. days
-  c. hours
-**
-*/
-
 export type EventDataType = {
   title: string;
   date: string;

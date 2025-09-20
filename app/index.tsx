@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 export default function Eventlist() {
   const { eventList } = useEvents();
 
-  //TODO: order by Date accending
+  const sortedEvents = eventList ? [...eventList].sort((a, b) => a.date.localeCompare(b.date)) : [];
 
   return (
     <View>
@@ -15,24 +15,23 @@ export default function Eventlist() {
         </Link>
       </View>
       <View>
-        {eventList &&
-          eventList.map((event) => {
-            return (
-              <View key={event.id}>
-                <Text>{event.title}</Text>
-                <Text>{event.date}</Text>
-                <Link
-                  style={{ color: "red" }}
-                  href={{
-                    pathname: "/event/[id]",
-                    params: { id: event.id },
-                  }}
-                >
-                  {event.title}
-                </Link>
-              </View>
-            );
-          })}
+        {sortedEvents.map((event) => {
+          return (
+            <View key={event.id}>
+              <Text>{event.title}</Text>
+              <Text>{event.date}</Text>
+              <Link
+                style={{ color: "red" }}
+                href={{
+                  pathname: "/event/[id]",
+                  params: { id: event.id },
+                }}
+              >
+                {event.title}
+              </Link>
+            </View>
+          );
+        })}
       </View>
     </View>
   );

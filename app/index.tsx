@@ -1,11 +1,11 @@
 import { useEvents } from "@/components/storage/EventsProvider";
 import { Link } from "expo-router";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 export default function Eventlist() {
   const { eventList } = useEvents();
 
-  //TODO: order by number accending
+  //TODO: order by Date accending
 
   return (
     <View>
@@ -19,6 +19,8 @@ export default function Eventlist() {
           eventList.map((event) => {
             return (
               <View key={event.id}>
+                <Text>{event.title}</Text>
+                <Text>{event.date}</Text>
                 <Link
                   href={{
                     pathname: "/event/[id]",

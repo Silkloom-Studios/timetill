@@ -13,9 +13,8 @@ export default function EventForm() {
   const { addEvent } = useEvents();
 
   const today = new Date();
-  const nextMonth = new Date(today);
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
   const [formData, setFormData] = useState<FormDataType>({
     date: formatLocalDate(tomorrow),
@@ -43,12 +42,10 @@ export default function EventForm() {
   const handleSubmit = async () => {
     setIsLoading(true);
     if (formData.date && formData.title) {
-      const [year, month, day] = formData.date.split("-").map(Number);
-      const eventTimeStamp = new Date(year, month - 1, day);
-      if (eventTimeStamp >= tomorrow) {
+      const tomorrowStr = formatLocalDate(tomorrow);
+      if (formData.date >= tomorrowStr) {
         const newEvent = { title: formData.title, id: Date.now(), date: formData.date, ...formData };
         const savedEvent = await addEvent(newEvent);
-        console.log("saved event", savedEvent);
         if (savedEvent) {
           setModalVisible(true);
           setError({ error: true, message: "No error here!" });
@@ -124,7 +121,7 @@ export default function EventForm() {
         />
         <View style={{ marginBottom: 12 }}>
           <DateTimePicker
-            value={formData.date ? new Date(formData.date) : nextMonth}
+            value={formData.date ? new Date(formData.date) : tomorrow}
             mode="date"
             display="default"
             onChange={handleDateChange}

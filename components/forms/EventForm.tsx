@@ -58,10 +58,8 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
         const newEvent = { title: formData.title, date: formData.date, ...formData };
         let savedEvent = false;
         if (id && isEdit) {
-          console.log("has an id");
           savedEvent = await updateEvent(id, { ...newEvent, id: id });
         } else {
-          console.log("has no id present");
           savedEvent = await addEvent({ ...newEvent, id: Date.now() });
         }
 

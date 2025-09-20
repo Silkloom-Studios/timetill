@@ -1,5 +1,6 @@
 import React, { createContext, ReactNode, useContext, useEffect, useState } from "react";
 
+import { cancelEventNotification, scheduleEventNotification } from "@/utils/notifications";
 import { getEventsMap, saveEventsMap } from "@/utils/storage";
 
 export type Event = {
@@ -7,6 +8,7 @@ export type Event = {
   date: string;
   id: number;
   subtitle?: string;
+  notificationId?: string;
 };
 
 export type EventMap = Record<number, Event>;
@@ -39,19 +41,28 @@ export function EventsProvider<T extends Event>({ children }: EventsProviderProp
   };
 
   const addEvent = async (event: Event) => {
-    return await persist({ ...eventMap, [event.id]: event });
+    const notificationId = await scheduleEventNotification(event);
+    const newEvent = { ...event, notificationId };
+    return await persist({ ...eventMap, [event.id]: newEvent });
   };
 
   const updateEvent = async (id: number, event: Event) => {
     const current = eventMap[id];
     if (current) {
-      return await persist({ ...eventMap, [id]: { ...event } });
+      await cancelEventNotification(current.notificationId);
+      const notificationId = await scheduleEventNotification(event);
+      const newEvent = { ...event, notificationId };
+      return await persist({ ...eventMap, [id]: { ...newEvent } });
     }
     return false;
   };
 
   const removeEvent = async (id: number) => {
     const { [id]: _, ...rest } = eventMap;
+    const current = eventMap[id];
+    if (current) {
+      await cancelEventNotification(current.notificationId);
+    }
     return await persist(rest);
   };
 

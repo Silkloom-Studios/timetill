@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    height: 112, // customize height
+    height: 168, // customize height
     paddingTop: 32, // for status bar space
     flexDirection: "row",
     alignItems: "flex-start",

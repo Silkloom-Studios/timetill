@@ -8,7 +8,7 @@ export type Event = {
   date: string;
   id: number;
   subtitle?: string;
-  notificationId?: string;
+  notificationId?: string | null;
 };
 
 export type EventMap = Record<number, Event>;

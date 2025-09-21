@@ -40,13 +40,19 @@ export default function RootLayout() {
       <EventsProvider>
         <View style={styles.appContainer}>
           <SafeAreaView style={{ flex: 1 }}>
-            <Stack>
+            <Stack
+              screenOptions={{
+                contentStyle: {
+                  backgroundColor: Colors.background,
+                },
+              }}
+            >
               <Stack.Screen
                 name="index"
                 options={{
                   header: () => (
                     <CustomHeader hasBack={false}>
-                      <Pressable onPress={() => router.push("/create")} style={styles.backButton}>
+                      <Pressable onPress={() => router.push("/create")} style={styles.headerButton}>
                         <AddIcon />
                       </Pressable>
                     </CustomHeader>
@@ -61,7 +67,7 @@ export default function RootLayout() {
                   return {
                     header: () => (
                       <CustomHeader>
-                        <Pressable onPress={() => router.push(`/event/${params.id}/edit`)} style={styles.backButton}>
+                        <Pressable onPress={() => router.push(`/event/${params.id}/edit`)} style={styles.headerButton}>
                           <EditIcon />
                         </Pressable>
                       </CustomHeader>
@@ -94,7 +100,7 @@ function CustomHeader({ hasBack = true, children }: { hasBack?: boolean; childre
           <BackIcon />
         </Pressable>
       ) : (
-        <Title>My Events</Title>
+        <Title>{"My \nEvents"}</Title>
       )}
       <View>{children}</View>
     </View>
@@ -116,8 +122,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   backButton: {
-    // marginRight: 10,
-    padding: 5,
+    padding: 8,
+  },
+  headerButton: {
+    padding: 8,
     backgroundColor: addOpacity(Colors.foreground, 10),
     borderRadius: 4,
   },

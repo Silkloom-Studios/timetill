@@ -5,12 +5,19 @@ import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { EventsProvider } from "@/components/storage/EventsProvider";
+import { Title } from "@/components/text/Title";
+import { Colors } from "@/constants/theme";
 import { requestNotificationPermissions } from "@/utils/notifications";
+import { useFonts } from "expo-font";
 import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function RootLayout() {
-  const router = useRouter();
+  const [fontsLoaded] = useFonts({
+    rubikMono: require("../assets/fonts/RubikMonoOne-Regular.ttf"),
+    ubuntuMonoRegular: require("../assets/fonts/UbuntuSansMono-VariableFont_wght.ttf"),
+  });
+
   useEffect(() => {
     (async () => {
       const granted = await requestNotificationPermissions();
@@ -19,18 +26,24 @@ export default function RootLayout() {
       }
     })();
   }, []);
+
+  if (!fontsLoaded) {
+    return null; //TODO create Font Loading screen
+  }
   return (
     <ThemeProvider value={DefaultTheme}>
       <EventsProvider>
-        <SafeAreaView style={{ flex: 1 }}>
-          <Stack>
-            <Stack.Screen name="index" options={{ header: () => <CustomHeader hasBack={false} /> }} />
-            <Stack.Screen name="create" options={{ header: () => <CustomHeader /> }} />
-            <Stack.Screen name="event/[id]" options={{ header: () => <CustomHeader /> }} />
-            <Stack.Screen name="event/[id]/edit" options={{ header: () => <CustomHeader /> }} />
-          </Stack>
-          <StatusBar style="auto" />
-        </SafeAreaView>
+        <View style={styles.appContainer}>
+          <SafeAreaView style={{ flex: 1 }}>
+            <Stack>
+              <Stack.Screen name="index" options={{ header: () => <CustomHeader hasBack={false} /> }} />
+              <Stack.Screen name="create" options={{ header: () => <CustomHeader /> }} />
+              <Stack.Screen name="event/[id]" options={{ header: () => <CustomHeader /> }} />
+              <Stack.Screen name="event/[id]/edit" options={{ header: () => <CustomHeader /> }} />
+            </Stack>
+            <StatusBar style="auto" />
+          </SafeAreaView>
+        </View>
       </EventsProvider>
     </ThemeProvider>
   );
@@ -47,7 +60,7 @@ function CustomHeader({ hasBack = true }: { hasBack?: boolean }) {
         </Pressable>
       ) : (
         <>
-          <Text style={styles.headerTitle}>My Events</Text>
+          <Title>My Events</Title>
           <Pressable onPress={() => router.push("/create")} style={styles.backButton}>
             <Text style={styles.addText}>+</Text>
           </Pressable>
@@ -59,6 +72,11 @@ function CustomHeader({ hasBack = true }: { hasBack?: boolean }) {
 }
 
 const styles = StyleSheet.create({
+  appContainer: {
+    flex: 1,
+    backgroundColor: Colors.background,
+  },
+
   headerContainer: {
     height: 112, // customize height
     paddingTop: 32, // for status bar space
@@ -81,10 +99,5 @@ const styles = StyleSheet.create({
   addText: {
     fontSize: 32,
     color: "#fff", // back button color
-  },
-  headerTitle: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: "#fff",
   },
 });

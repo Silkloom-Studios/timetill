@@ -1,5 +1,6 @@
 import Countdown from "@/components/countdowns/Countdown";
 import { useEvents } from "@/components/storage/EventsProvider";
+import { Title } from "@/components/text/Title";
 import { parseId } from "@/utils/utils";
 import { Link, useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -46,8 +47,8 @@ export default function EventDetail() {
     <View>
       {eventData ? (
         <View>
-          <Text>{eventData.title}</Text>
-          <Text>{eventData.subtitle}</Text>
+          <Title>{eventData.title}</Title>
+          <Title type="subtitle">{eventData.subtitle}</Title>
           <Countdown date={eventData.date} />
           <Link href={`/event/${id}/edit`}>Edit Event</Link>
           <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(true)}>

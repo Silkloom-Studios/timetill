@@ -14,7 +14,9 @@ import { addOpacity } from "@/utils/colors";
 import { requestNotificationPermissions } from "@/utils/notifications";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-import { Pressable, StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+
+export const HEADER_HEIGHT = 168;
 
 export default function RootLayout() {
   const router = useRouter();
@@ -52,9 +54,9 @@ export default function RootLayout() {
                 options={{
                   header: () => (
                     <CustomHeader hasBack={false}>
-                      <Pressable onPress={() => router.push("/create")} style={styles.headerButton}>
+                      <TouchableOpacity onPress={() => router.push("/create")} style={styles.headerButton}>
                         <AddIcon />
-                      </Pressable>
+                      </TouchableOpacity>
                     </CustomHeader>
                   ),
                 }}
@@ -67,9 +69,12 @@ export default function RootLayout() {
                   return {
                     header: () => (
                       <CustomHeader>
-                        <Pressable onPress={() => router.push(`/event/${params.id}/edit`)} style={styles.headerButton}>
+                        <TouchableOpacity
+                          onPress={() => router.push(`/event/${params.id}/edit`)}
+                          style={styles.headerButton}
+                        >
                           <EditIcon />
-                        </Pressable>
+                        </TouchableOpacity>
                       </CustomHeader>
                     ),
                   };
@@ -96,9 +101,9 @@ function CustomHeader({ hasBack = true, children }: { hasBack?: boolean; childre
   return (
     <View style={styles.headerContainer}>
       {hasBack ? (
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <BackIcon />
-        </Pressable>
+        </TouchableOpacity>
       ) : (
         <Title>{"My \nEvents"}</Title>
       )}
@@ -115,7 +120,7 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    height: 168, // customize height
+    height: HEADER_HEIGHT, // customize height
     paddingTop: 32, // for status bar space
     flexDirection: "row",
     alignItems: "flex-start",

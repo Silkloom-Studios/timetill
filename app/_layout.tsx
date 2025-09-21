@@ -4,15 +4,20 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import AddIcon from "@/components/icons/AddIcon";
+import BackIcon from "@/components/icons/BackIcon";
+import EditIcon from "@/components/icons/EditIcon";
 import { EventsProvider } from "@/components/storage/EventsProvider";
 import { Title } from "@/components/text/Title";
 import { Colors } from "@/constants/theme";
+import { addOpacity } from "@/utils/colors";
 import { requestNotificationPermissions } from "@/utils/notifications";
 import { useFonts } from "expo-font";
 import { useEffect } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 
 export default function RootLayout() {
+  const router = useRouter();
   const [fontsLoaded] = useFonts({
     rubikMono: require("../assets/fonts/RubikMonoOne-Regular.ttf"),
     ubuntuMonoRegular: require("../assets/fonts/UbuntuSansMono-VariableFont_wght.ttf"),
@@ -36,10 +41,40 @@ export default function RootLayout() {
         <View style={styles.appContainer}>
           <SafeAreaView style={{ flex: 1 }}>
             <Stack>
-              <Stack.Screen name="index" options={{ header: () => <CustomHeader hasBack={false} /> }} />
+              <Stack.Screen
+                name="index"
+                options={{
+                  header: () => (
+                    <CustomHeader hasBack={false}>
+                      <Pressable onPress={() => router.push("/create")} style={styles.backButton}>
+                        <AddIcon />
+                      </Pressable>
+                    </CustomHeader>
+                  ),
+                }}
+              />
               <Stack.Screen name="create" options={{ header: () => <CustomHeader /> }} />
-              <Stack.Screen name="event/[id]" options={{ header: () => <CustomHeader /> }} />
-              <Stack.Screen name="event/[id]/edit" options={{ header: () => <CustomHeader /> }} />
+              <Stack.Screen
+                name="event/[id]"
+                options={({ route }) => {
+                  const params = route.params as { id: string };
+                  return {
+                    header: () => (
+                      <CustomHeader>
+                        <Pressable onPress={() => router.push(`/event/${params.id}/edit`)} style={styles.backButton}>
+                          <EditIcon />
+                        </Pressable>
+                      </CustomHeader>
+                    ),
+                  };
+                }}
+              />
+              <Stack.Screen
+                name="event/[id]/edit"
+                options={{
+                  header: () => <CustomHeader />,
+                }}
+              />
             </Stack>
             <StatusBar style="auto" />
           </SafeAreaView>
@@ -50,23 +85,18 @@ export default function RootLayout() {
 }
 
 // Custom Header Component
-function CustomHeader({ hasBack = true }: { hasBack?: boolean }) {
+function CustomHeader({ hasBack = true, children }: { hasBack?: boolean; children?: React.ReactNode }) {
   const router = useRouter();
   return (
     <View style={styles.headerContainer}>
       {hasBack ? (
         <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <Text style={styles.backText}>◀</Text>
+          <BackIcon />
         </Pressable>
       ) : (
-        <>
-          <Title>My Events</Title>
-          <Pressable onPress={() => router.push("/create")} style={styles.backButton}>
-            <Text style={styles.addText}>+</Text>
-          </Pressable>
-        </>
+        <Title>My Events</Title>
       )}
-      <View></View>
+      <View>{children}</View>
     </View>
   );
 }
@@ -75,22 +105,21 @@ const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
     backgroundColor: Colors.background,
+    paddingHorizontal: 20,
   },
 
   headerContainer: {
     height: 112, // customize height
     paddingTop: 32, // for status bar space
-    backgroundColor: "#4A90E2", // background color
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "space-between",
-    paddingHorizontal: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
   },
   backButton: {
-    marginRight: 10,
+    // marginRight: 10,
     padding: 5,
+    backgroundColor: addOpacity(Colors.foreground, 10),
+    borderRadius: 4,
   },
   backText: {
     fontSize: 32,

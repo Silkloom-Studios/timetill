@@ -8,6 +8,7 @@ export const Colors = {
   midGray: "#293035",
   darkGray: "#1E2327",
   background: "#32383D",
+  foreground: "#eeeeee",
   text: "#EEEEEE",
 };
 

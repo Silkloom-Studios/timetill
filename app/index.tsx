@@ -1,7 +1,7 @@
 import { useEvents } from "@/components/storage/EventsProvider";
 import { computeDaysLeft, DaysLeftResult } from "@/utils/countdown";
 import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 //TODO Create scroll Effect
 
@@ -50,7 +50,7 @@ export default function Eventlist() {
   const sortedEvents = eventList ? [...eventList].sort((a, b) => a.date.localeCompare(b.date)) : [];
 
   return (
-    <View>
+    <ScrollView>
       <View>
         {sortedEvents.map((event) => {
           const dateDetails = computeDaysLeft(event.date);
@@ -72,7 +72,7 @@ export default function Eventlist() {
           );
         })}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 

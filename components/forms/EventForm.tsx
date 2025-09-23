@@ -121,7 +121,7 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
             handleChange(text, "title");
           }}
           value={formData.title}
-          maxLength={50}
+          maxLength={24}
           placeholder="Event title"
         />
         <TextInput

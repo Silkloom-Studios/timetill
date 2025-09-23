@@ -33,10 +33,24 @@ export function EventsProvider<T extends Event>({ children }: EventsProviderProp
 
   useEffect(() => {
     getEventsMap();
-    (async () => {
-      addSeedEvents();
-    })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      console.log("[addSeedEvent] current storage length: ", Object.values(eventMap).length);
+      if (Object.values(eventMap).length < 1) {
+        console.log("[addSeedEvent] begin seeding...");
+        const newMap: EventMap = {};
+        for (const event of DUMMY_LIST) {
+          newMap[event.id] = event;
+        }
+        setEventMap(newMap);
+        await persist({ ...newMap });
+      } else {
+        console.log("[addSeedEvent] no seeding required");
+      }
+    })();
+  }, [eventMap]);
 
   const persist = async (newMap: EventMap) => {
     setEventMap(newMap);
@@ -121,7 +135,7 @@ const DUMMY_LIST = [
     id: 1,
     title: "Doctor Appointment + Alice's 30th birthday hell yeah",
     subtitle: "Annual check-up",
-    date: "2025-09-21",
+    date: "2025-09-23",
     notificationId: null,
   },
 

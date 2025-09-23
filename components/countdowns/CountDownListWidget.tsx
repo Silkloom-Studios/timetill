@@ -24,6 +24,7 @@ export default function CountDownListWidget({ event, index }: CountdownListWidge
         }
         style={styles.cardBackground}
       >
+        {resolveDateWidgetComponents(dateDetails)}
         <View style={styles.cardPanel}>
           <View style={styles.cardPanelContainer}>
             <View style={styles.cardPanelTop}></View>
@@ -47,10 +48,15 @@ export default function CountDownListWidget({ event, index }: CountdownListWidge
 }
 
 const resolveDateWidgetOptions = (dateData: DaysLeftResult) => {
-  if (dateData.hasPassed) return "past";
-  if (dateData.isToday) return "today";
-  if (dateData.days === 0) return "tomorrow";
-  return "future";
+  let status = "future";
+  if (dateData.hasPassed && !dateData.isToday) {
+    status = "past";
+  } else if (dateData.isToday) {
+    status = "today";
+  } else if (dateData.days === 0) {
+    status = "tomorrow";
+  }
+  return status;
 };
 
 const resolveDateWidgetComponents = (dateData: DaysLeftResult) => {
@@ -58,14 +64,26 @@ const resolveDateWidgetComponents = (dateData: DaysLeftResult) => {
 
   switch (status) {
     case "future":
-      return <Text>{dateData.days} days left</Text>;
+      return null;
     case "tomorrow":
-      return <Text>Tomorrow</Text>;
+      return <UpcomingEventChip color={Colors.white} text="tomorrow" />;
     case "today":
-      return <Text>Today</Text>;
+      return <UpcomingEventChip color={Colors.gold} text="today" />;
     case "past":
-      return <Text>Finished</Text>;
+      return <UpcomingEventChip color={Colors.red} text="finished" />;
   }
+};
+
+interface UpcomingEventsChipProps {
+  color: string;
+  text: string;
+}
+const UpcomingEventChip = ({ color, text }: UpcomingEventsChipProps) => {
+  return (
+    <View style={[styles.chipContainer, { backgroundColor: color }]}>
+      <Text>{text}</Text>
+    </View>
+  );
 };
 
 const resolveNumberStyleBasedOnDigits = (daysLeft: number) => {
@@ -96,6 +114,13 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 124,
     borderRadius: 4,
+    position: "relative",
+  },
+  chipContainer: {
+    position: "absolute",
+    zIndex: 2,
+    padding: 4,
+    borderBottomRightRadius: 8,
   },
   cardTitle: {
     width: "100%",

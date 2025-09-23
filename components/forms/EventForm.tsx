@@ -4,6 +4,9 @@ import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/dat
 import { Link } from "expo-router";
 import { useState } from "react";
 import { Button, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+
+const MAX_TITLE_CHARS = 24;
+const MAX_SUBTITLE_CHARS = 40;
 type FormDataType = {
   date?: string;
   title?: string;
@@ -121,9 +124,10 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
             handleChange(text, "title");
           }}
           value={formData.title}
-          maxLength={24}
+          maxLength={MAX_TITLE_CHARS}
           placeholder="Event title"
         />
+        <Text>{MAX_TITLE_CHARS} chars Max</Text>
         <TextInput
           style={{
             height: 40,
@@ -135,9 +139,10 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
             handleChange(text, "subtitle");
           }}
           value={formData.subtitle}
-          maxLength={50}
+          maxLength={MAX_SUBTITLE_CHARS}
           placeholder="subtitle"
         />
+        <Text>{MAX_SUBTITLE_CHARS} chars Max</Text>
         <View style={{ marginBottom: 12 }}>
           <DateTimePicker
             value={formData.date ? parseLocalDate(formData.date) : tomorrow}

@@ -157,7 +157,7 @@ const DUMMY_LIST = [
     id: 21,
     title: "Birthday Party",
     subtitle: "Alice's 30th birthday",
-    date: "2027-09-20",
+    date: "2027-09-24",
     notificationId: null,
   },
   {

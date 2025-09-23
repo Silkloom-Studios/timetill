@@ -30,5 +30,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "regular",
     lineHeight: 20,
+    fontFamily: Fonts.custom.headings,
   },
 });

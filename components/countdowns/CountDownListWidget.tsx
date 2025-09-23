@@ -24,7 +24,6 @@ export default function CountDownListWidget({ event, index }: CountdownListWidge
         }
         style={styles.cardBackground}
       >
-        {/* <View>{resolveDateWidgetComponents(dateDetails)}</View> */}
         <View style={styles.cardPanel}>
           <View style={styles.cardPanelContainer}>
             <View style={styles.cardPanelTop}></View>
@@ -40,7 +39,9 @@ export default function CountDownListWidget({ event, index }: CountdownListWidge
           </View>
         </View>
       </TouchableOpacity>
-      <Text style={styles.cardTitle}>{event.title}</Text>
+      <Text ellipsizeMode="tail" style={styles.cardTitle} numberOfLines={1}>
+        {event.title}
+      </Text>
     </View>
   );
 }
@@ -97,9 +98,11 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   cardTitle: {
+    width: "100%",
     paddingTop: 8,
     fontSize: 12,
     color: addOpacity(Colors.text, 35),
+    paddingRight: 2,
   },
   cardPanel: {
     padding: 12,
@@ -110,6 +113,7 @@ const styles = StyleSheet.create({
   },
   cardPanelContainer: {
     flex: 1,
+    minWidth: 100,
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",

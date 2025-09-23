@@ -99,7 +99,7 @@ export default function RootLayout() {
 function CustomHeader({ hasBack = true, children }: { hasBack?: boolean; children?: React.ReactNode }) {
   const router = useRouter();
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, { height: hasBack ? HEADER_HEIGHT - 32 : HEADER_HEIGHT }]}>
       {hasBack ? (
         <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
           <BackIcon />
@@ -120,8 +120,7 @@ const styles = StyleSheet.create({
   },
 
   headerContainer: {
-    height: HEADER_HEIGHT, // customize height
-    paddingTop: 32, // for status bar space
+    paddingTop: 32,
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "space-between",
@@ -133,13 +132,5 @@ const styles = StyleSheet.create({
     padding: 8,
     backgroundColor: addOpacity(Colors.foreground, 10),
     borderRadius: 4,
-  },
-  backText: {
-    fontSize: 32,
-    color: "#fff", // back button color
-  },
-  addText: {
-    fontSize: 32,
-    color: "#fff", // back button color
   },
 });

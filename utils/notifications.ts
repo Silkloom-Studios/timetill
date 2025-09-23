@@ -50,7 +50,7 @@ export async function scheduleEventNotification(event: Event) {
   return notificationId;
 }
 
-export async function cancelEventNotification(notificationId?: string) {
+export async function cancelEventNotification(notificationId?: string | null) {
   if (notificationId) {
     await Notifications.cancelScheduledNotificationAsync(notificationId);
   }

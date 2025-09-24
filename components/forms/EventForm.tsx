@@ -3,10 +3,12 @@ import { Colors } from "@/constants/theme";
 import { addOpacity } from "@/utils/colors";
 import { formatLocalDate, parseLocalDate } from "@/utils/dates";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
-import { Link } from "expo-router";
 import { useState } from "react";
-import { Keyboard, Modal, Pressable, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import { Keyboard, Modal, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import ModalBase, { modalStyles } from "../modal/ModalBase";
 import Btn from "../pressable/Btn";
+import BtnLink from "../pressable/BtnLink";
+import { Title } from "../text/Title";
 
 const MAX_TITLE_CHARS = 24;
 const MAX_SUBTITLE_CHARS = 40;
@@ -73,7 +75,7 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
           setModalVisible(true);
           setError({ error: false, message: "No error here!" });
         } else {
-          setError({ error: true, message: "unable to store new event" });
+          setError({ error: true, message: "Unable to store new event" });
         }
       } else {
         setError({ error: true, message: "Date must be later than today." });
@@ -107,15 +109,28 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
               setModalVisible(!modalVisible);
             }}
           >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Success!</Text>
-                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
-                  <Text style={styles.textStyle}>{isEdit ? "continue editing" : "create new"}</Text>
-                </Pressable>
-                <Link href="..">{isEdit ? "return to event" : "see all events"}</Link>
+            <ModalBase>
+              <View>
+                <Title center type="subtitle">
+                  Success!
+                </Title>
               </View>
-            </View>
+              <View style={modalStyles.modalBtnContainer}>
+                <Btn
+                  type="dark"
+                  onPress={handleModalClose}
+                  text={isEdit ? "continue editing" : "create new"}
+                  style={modalStyles.modalBtnTop}
+                />
+                <BtnLink
+                  href=".."
+                  type="goldOutline"
+                  onPress={handleModalClose}
+                  text={isEdit ? "return to event" : "see all events"}
+                  style={modalStyles.modalBtnTop}
+                />
+              </View>
+            </ModalBase>
           </Modal>
           <View style={[styles.inputContainer, { marginTop: 0 }]}>
             <Text style={styles.inputTitle}>Title:</Text>
@@ -156,11 +171,11 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
             />
           </View>
           {error.error ? (
-            <View>
-              <Text>{error.message}</Text>
+            <View style={styles.errorContainer}>
+              <Text style={styles.errorText}>*{error.message}</Text>
             </View>
           ) : null}
-          <View style={styles.inputContainer}>
+          <View style={[styles.inputContainer, error.error ? { marginTop: 0 } : {}]}>
             <Btn
               type="dark"
               onPress={handleSubmit}
@@ -198,7 +213,13 @@ const styles = StyleSheet.create({
     backgroundColor: addOpacity(Colors.gold, 0),
     marginLeft: -10,
   },
-
+  errorContainer: {
+    paddingHorizontal: 16,
+    paddingTop: 8,
+  },
+  errorText: {
+    color: addOpacity(Colors.red, 80),
+  },
   //
   centeredView: {
     flex: 1,

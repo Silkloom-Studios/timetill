@@ -1,6 +1,11 @@
+import { Colors } from "@/constants/theme";
+import { addOpacity } from "@/utils/colors";
 import { computeCountdown, CountdownResult } from "@/utils/countdown";
 import { useEffect, useState } from "react";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { Modal, StyleSheet, View } from "react-native";
+import ModalBase, { modalStyles } from "../modal/ModalBase";
+import Btn from "../pressable/Btn";
+import { Title } from "../text/Title";
 import CountdownWidget from "./CountDownWidget";
 
 interface CountdownProps {
@@ -38,6 +43,7 @@ export default function Countdown({ date }: CountdownProps) {
         <CountdownWidget number={hours} text={"HOURS"} index={1} />
         <CountdownWidget number={minutes} text={"MINUTES"} index={2} />
         <CountdownWidget number={seconds} text={"SECONDS"} index={3} />
+
         {isToday ? (
           <Modal
             animationType="slide"
@@ -47,15 +53,19 @@ export default function Countdown({ date }: CountdownProps) {
               setModalVisible(!modalVisible);
             }}
           >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>It&apos;s Today!</Text>
-                <Text style={styles.modalText}>Don&apos;t forget to celebrate!</Text>
-                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
-                  <Text style={styles.textStyle}>close</Text>
-                </Pressable>
+            <ModalBase>
+              <View>
+                <Title center type="subtitle">
+                  It&apos;s Today!
+                </Title>
+                <Title center type="subtitle">
+                  {"\nRemeber to celebrate!"}
+                </Title>
               </View>
-            </View>
+              <View style={modalStyles.modalBtnContainer}>
+                <Btn type="dark" onPress={handleModalClose} text={"close"} style={modalStyles.modalBtnTop} />
+              </View>
+            </ModalBase>
           </Modal>
         ) : null}
         {!isToday && hasPassed ? (
@@ -67,15 +77,19 @@ export default function Countdown({ date }: CountdownProps) {
               setModalVisible(!modalVisible);
             }}
           >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>Event ended on:</Text>
-                <Text style={styles.modalText}>{date}</Text>
-                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
-                  <Text style={styles.textStyle}>close</Text>
-                </Pressable>
+            <ModalBase>
+              <View>
+                <Title center type="subtitle">
+                  Event ended on:
+                </Title>
+                <Title center type="subtitle" style={{ color: addOpacity(Colors.gold, 80) }}>
+                  {date}
+                </Title>
               </View>
-            </View>
+              <View style={modalStyles.modalBtnContainer}>
+                <Btn type="dark" onPress={handleModalClose} text={"close"} style={modalStyles.modalBtnTop} />
+              </View>
+            </ModalBase>
           </Modal>
         ) : null}
       </View>

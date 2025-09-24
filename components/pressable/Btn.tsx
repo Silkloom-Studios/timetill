@@ -1,18 +1,19 @@
 import { Colors } from "@/constants/theme";
 import { addOpacity } from "@/utils/colors";
-import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text, ViewStyle } from "react-native";
 
-interface BtnProps {
+export interface BtnProps {
   onPress: () => void;
   text: string;
   type: "dark" | "goldOutline" | "red";
   disabled?: boolean;
+  style?: ViewStyle;
 }
 
-export default function Btn({ onPress, text, type, disabled = false }: BtnProps) {
+export default function Btn({ onPress, text, type, disabled = false, style = {} }: BtnProps) {
   return (
     <Pressable
-      style={[pressableStyles.base, disabled ? pressableStyles.disabled : pressableStyles[type]]}
+      style={[pressableStyles.base, disabled ? pressableStyles.disabled : pressableStyles[type], style]}
       onPress={() => (disabled ? {} : onPress())}
     >
       <Text style={[textStyles.base, disabled ? textStyles.disabled : textStyles[type]]}>{text}</Text>
@@ -20,7 +21,7 @@ export default function Btn({ onPress, text, type, disabled = false }: BtnProps)
   );
 }
 
-const pressableStyles = StyleSheet.create({
+export const pressableStyles = StyleSheet.create({
   base: {
     borderRadius: 4,
     paddingVertical: 10,
@@ -30,7 +31,10 @@ const pressableStyles = StyleSheet.create({
     borderColor: Colors.darkGray,
     borderWidth: 2,
   },
-  goldOutline: {},
+  goldOutline: {
+    borderColor: addOpacity(Colors.gold, 70),
+    borderWidth: 2,
+  },
   red: {
     borderColor: addOpacity(Colors.red, 70),
     borderWidth: 2,
@@ -41,17 +45,17 @@ const pressableStyles = StyleSheet.create({
   },
 });
 
-const textStyles = StyleSheet.create({
+export const textStyles = StyleSheet.create({
   base: {
-    fontSize: 20,
+    fontSize: 18,
     textAlign: "center",
     lineHeight: 24,
   },
   dark: {
     color: Colors.gold,
   },
-  goldOutline: {},
-  red: { color: addOpacity(Colors.red, 80) },
+  goldOutline: { color: addOpacity(Colors.darkGray, 100) },
+  red: { color: addOpacity(Colors.red, 90) },
   disabled: {
     color: addOpacity(Colors.foreground, 20),
   },

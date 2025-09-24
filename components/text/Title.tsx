@@ -3,15 +3,17 @@ import { StyleSheet, Text, type TextProps } from "react-native";
 
 export type ThemedTextProps = TextProps & {
   type?: "title" | "subtitle";
+  center?: boolean;
 };
 
-export function Title({ style, type = "title", ...rest }: ThemedTextProps) {
+export function Title({ style, type = "title", center = false, ...rest }: ThemedTextProps) {
   return (
     <Text
       style={[
         { color: Colors.text },
         type === "title" ? styles.title : undefined,
         type === "subtitle" ? styles.subtitle : undefined,
+        center ? { textAlign: "center" } : undefined,
         style,
       ]}
       {...rest}

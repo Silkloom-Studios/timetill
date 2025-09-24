@@ -1,6 +1,6 @@
-import { computeCountdown, CountdownResult } from "@/utils/countdown";
+import { computeCountdown, CountdownResult, resolveDateWidgetOptions } from "@/utils/countdown";
 import { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import CountdownWidget from "./CountDownWidget";
 
 interface CountdownProps {
@@ -9,6 +9,11 @@ interface CountdownProps {
 
 export default function Countdown({ date }: CountdownProps) {
   const [cdData, setCdData] = useState<CountdownResult | undefined>();
+  const [modalVisible, setModalVisible] = useState<boolean>(true);
+
+  const handleModalClose = () => {
+    setModalVisible(!modalVisible);
+  };
 
   useEffect(() => {
     setCdData(computeCountdown(date));
@@ -26,27 +31,61 @@ export default function Countdown({ date }: CountdownProps) {
 
   const { hasPassed, isToday, days, hours, minutes, seconds } = cdData;
 
+  const status = resolveDateWidgetOptions(cdData);
+
   return (
-    <View style={countdownStyles.container}>
-      <View style={countdownStyles.countdownWrapper}>
-        {hasPassed ? (
-          <Text>Event has passed.</Text>
-        ) : isToday ? (
-          <Text>Event is today!</Text>
-        ) : (
-          <>
-            <CountdownWidget number={days} text={"DAYS"} index={0} />
-            <CountdownWidget number={hours} text={"HOURS"} index={1} />
-            <CountdownWidget number={minutes} text={"MINUTES"} index={2} />
-            <CountdownWidget number={seconds} text={"SECONDS"} index={3} />
-          </>
-        )}
+    <View style={styles.container}>
+      <View style={styles.countdownWrapper}>
+        <CountdownWidget number={days} text={"DAYS"} index={0} />
+        <CountdownWidget number={hours} text={"HOURS"} index={1} />
+        <CountdownWidget number={minutes} text={"MINUTES"} index={2} />
+        <CountdownWidget number={seconds} text={"SECONDS"} index={3} />
+        {isToday ? (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>It&apos;s Today!</Text>
+                <Text style={styles.modalText}>Don&apos;t forget to celebrate!</Text>
+                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
+                  <Text style={styles.textStyle}>close</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+        ) : null}
+        {!isToday && hasPassed ? (
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Event ended on:</Text>
+                <Text style={styles.modalText}>{date}</Text>
+                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
+                  <Text style={styles.textStyle}>close</Text>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
+        ) : null}
       </View>
     </View>
   );
 }
 
-const countdownStyles = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     width: "100%",
     display: "flex",
@@ -58,5 +97,46 @@ const countdownStyles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     rowGap: 16,
+  },
+  //
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
   },
 });

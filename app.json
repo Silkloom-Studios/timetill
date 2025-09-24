@@ -8,8 +8,14 @@
     "scheme": "timetill",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/splash-icon.png",
+      "backgroundColor": "#e14f51",
+      "resizeMode": "contain"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.santibo10.timetill"
     },
     "android": {
       "adaptiveIcon": {

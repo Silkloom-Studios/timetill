@@ -1,4 +1,5 @@
 import EventForm from "@/components/forms/EventForm";
+import Btn from "@/components/pressable/Btn";
 import { useEvents } from "@/components/storage/EventsProvider";
 import { parseId } from "@/utils/utils";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -45,11 +46,10 @@ export default function EventDetail() {
   return (
     <View>
       <View>
-        <Text>Edit</Text>
         {eventData && <EventForm {...eventData} />}
-        <Pressable style={[styles.button, styles.buttonClose]} onPress={() => setModalVisible(true)}>
-          <Text style={styles.textStyle}>Trash</Text>
-        </Pressable>
+        <View style={styles.inputContainer}>
+          <Btn type="red" onPress={() => setModalVisible(true)} text="delete" />
+        </View>
       </View>
       <Modal
         animationType="slide"
@@ -65,9 +65,9 @@ export default function EventDetail() {
             <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
               <Text style={styles.textStyle}>cancel</Text>
             </Pressable>
-            <Pressable style={[styles.button, styles.buttonClose]} onPress={handleDelete}>
-              <Text style={styles.textStyle}>delete</Text>
-            </Pressable>
+            <View style={styles.inputContainer}>
+              <Btn type="dark" onPress={handleDelete} text="delete" />
+            </View>
           </View>
         </View>
       </Modal>
@@ -80,6 +80,10 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  inputContainer: {
+    marginTop: 24,
+    paddingHorizontal: 16,
   },
   modalView: {
     margin: 20,

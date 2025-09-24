@@ -1,9 +1,12 @@
 import { useEvents } from "@/components/storage/EventsProvider";
+import { Colors } from "@/constants/theme";
+import { addOpacity } from "@/utils/colors";
 import { formatLocalDate, parseLocalDate } from "@/utils/dates";
 import DateTimePicker, { DateTimePickerEvent } from "@react-native-community/datetimepicker";
 import { Link } from "expo-router";
 import { useState } from "react";
-import { Button, Modal, Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Keyboard, Modal, Pressable, StyleSheet, Text, TextInput, TouchableWithoutFeedback, View } from "react-native";
+import Btn from "../pressable/Btn";
 
 const MAX_TITLE_CHARS = 24;
 const MAX_SUBTITLE_CHARS = 40;
@@ -93,77 +96,110 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
   };
 
   return (
-    <View>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalText}>Success!</Text>
-              <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
-                <Text style={styles.textStyle}>{isEdit ? "continue editing" : "create new"}</Text>
-              </Pressable>
-              <Link href="..">{isEdit ? "return to event" : "see all events"}</Link>
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalText}>Success!</Text>
+                <Pressable style={[styles.button, styles.buttonClose]} onPress={handleModalClose}>
+                  <Text style={styles.textStyle}>{isEdit ? "continue editing" : "create new"}</Text>
+                </Pressable>
+                <Link href="..">{isEdit ? "return to event" : "see all events"}</Link>
+              </View>
             </View>
+          </Modal>
+          <View style={[styles.inputContainer, { marginTop: 0 }]}>
+            <Text style={styles.inputTitle}>Title:</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(text) => {
+                handleChange(text, "title");
+              }}
+              value={formData.title}
+              maxLength={MAX_TITLE_CHARS}
+              // placeholder="Event title"
+            />
+            <Text style={styles.inputSubText}>{MAX_TITLE_CHARS} chars Max</Text>
           </View>
-        </Modal>
-        <TextInput
-          style={{
-            height: 40,
-            margin: 12,
-            borderWidth: 1,
-            padding: 10,
-          }}
-          onChangeText={(text) => {
-            handleChange(text, "title");
-          }}
-          value={formData.title}
-          maxLength={MAX_TITLE_CHARS}
-          placeholder="Event title"
-        />
-        <Text>{MAX_TITLE_CHARS} chars Max</Text>
-        <TextInput
-          style={{
-            height: 40,
-            margin: 12,
-            borderWidth: 1,
-            padding: 10,
-          }}
-          onChangeText={(text) => {
-            handleChange(text, "subtitle");
-          }}
-          value={formData.subtitle}
-          maxLength={MAX_SUBTITLE_CHARS}
-          placeholder="subtitle"
-        />
-        <Text>{MAX_SUBTITLE_CHARS} chars Max</Text>
-        <View style={{ marginBottom: 12 }}>
-          <DateTimePicker
-            value={formData.date ? parseLocalDate(formData.date) : tomorrow}
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-            minimumDate={tomorrow}
-          />
+          <View style={styles.inputContainer}>
+            <Text style={styles.inputTitle}>Subtitle:</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={(text) => {
+                handleChange(text, "subtitle");
+              }}
+              value={formData.subtitle}
+              maxLength={MAX_SUBTITLE_CHARS}
+              // placeholder="subtitle"
+            />
+            <Text style={styles.inputSubText}>{MAX_SUBTITLE_CHARS} chars Max</Text>
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={[styles.inputTitle, { paddingBottom: 8 }]}>Date</Text>
+            <DateTimePicker
+              style={styles.datePicker}
+              value={formData.date ? parseLocalDate(formData.date) : tomorrow}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+              accentColor={Colors.gold}
+              // minimumDate={tomorrow}
+            />
+          </View>
+          {error.error ? (
+            <View>
+              <Text>{error.message}</Text>
+            </View>
+          ) : null}
+          <View style={styles.inputContainer}>
+            <Btn
+              type="dark"
+              onPress={handleSubmit}
+              text="save"
+              disabled={!formData.title || !formData.date || isLoading}
+            />
+          </View>
         </View>
-        {error.error ? (
-          <View>
-            <Text>{error.message}</Text>
-          </View>
-        ) : null}
-        <Button title="Save" disabled={!formData.title || !formData.date || isLoading} onPress={handleSubmit} />
       </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 }
 
 const styles = StyleSheet.create({
+  inputContainer: {
+    marginTop: 24,
+    paddingHorizontal: 16,
+  },
+  inputTitle: {
+    fontSize: 16,
+    color: Colors.text,
+  },
+  textInput: {
+    height: 28,
+    borderBottomWidth: 2,
+    borderBottomColor: Colors.gold,
+    color: addOpacity(Colors.text, 70),
+  },
+  inputSubText: {
+    fontSize: 14,
+    color: addOpacity(Colors.text, 60),
+    paddingTop: 4,
+  },
+  datePicker: {
+    backgroundColor: addOpacity(Colors.gold, 0),
+    marginLeft: -10,
+  },
+
+  //
   centeredView: {
     flex: 1,
     justifyContent: "center",

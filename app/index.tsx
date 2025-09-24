@@ -5,7 +5,7 @@ import { addOpacity } from "@/utils/colors";
 import { formatLocalDate } from "@/utils/dates";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { HEADER_HEIGHT } from "./_layout";
 //TODO Create scroll Effect
 
@@ -39,9 +39,15 @@ export default function Eventlist() {
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollContainer}>
         <View style={styles.scrollView}>
-          {events.map((event, i) => {
-            return <CountDownListWidget key={event.id} event={event} index={i} />;
-          })}
+          {events.length > 0 ? (
+            events.map((event, i) => {
+              return <CountDownListWidget key={event.id} event={event} index={i} />;
+            })
+          ) : (
+            <View style={{ width: "100%" }}>
+              <Text style={styles.noticeText}>Press the + icon to add a new event</Text>
+            </View>
+          )}
         </View>
       </ScrollView>
 
@@ -79,5 +85,10 @@ const styles = StyleSheet.create({
     right: 0,
     height: 32,
     zIndex: 1,
+  },
+  noticeText: {
+    color: Colors.text,
+    textAlign: "center",
+    paddingTop: 32,
   },
 });

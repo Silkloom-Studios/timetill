@@ -13,14 +13,22 @@ import { Colors } from "@/constants/theme";
 import { addOpacity } from "@/utils/colors";
 import { requestNotificationPermissions } from "@/utils/notifications";
 import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 export const HEADER_HEIGHT = 168;
 
+SplashScreen.setOptions({
+  duration: 1000,
+  fade: true,
+});
+
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
   const router = useRouter();
-  const [fontsLoaded] = useFonts({
+  const [loaded] = useFonts({
     rubikMono: require("../assets/fonts/RubikMonoOne-Regular.ttf"),
     ubuntuMonoRegular: require("../assets/fonts/UbuntuSansMono-VariableFont_wght.ttf"),
   });
@@ -34,8 +42,14 @@ export default function RootLayout() {
     })();
   }, []);
 
-  if (!fontsLoaded) {
-    return null; //TODO create Font Loading screen
+  useEffect(() => {
+    if (loaded) {
+      SplashScreen.hide();
+    }
+  }, [loaded]);
+
+  if (!loaded) {
+    return null;
   }
   return (
     <ThemeProvider value={DefaultTheme}>

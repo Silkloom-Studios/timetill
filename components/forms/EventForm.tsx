@@ -28,7 +28,7 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
   tomorrow.setDate(today.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
 
-  const [isEdit, setIsEdit] = useState<boolean>(id ? true : false);
+  const [isEdit] = useState<boolean>(id ? true : false);
 
   const [formData, setFormData] = useState<FormDataType>({
     date: date || formatLocalDate(tomorrow),

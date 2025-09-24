@@ -1,4 +1,4 @@
-import { computeCountdown, CountdownResult, resolveDateWidgetOptions } from "@/utils/countdown";
+import { computeCountdown, CountdownResult } from "@/utils/countdown";
 import { useEffect, useState } from "react";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
 import CountdownWidget from "./CountDownWidget";
@@ -30,8 +30,6 @@ export default function Countdown({ date }: CountdownProps) {
   }
 
   const { hasPassed, isToday, days, hours, minutes, seconds } = cdData;
-
-  const status = resolveDateWidgetOptions(cdData);
 
   return (
     <View style={styles.container}>

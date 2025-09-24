@@ -1,8 +1,10 @@
 import CountDownListWidget from "@/components/countdowns/CountDownListWidget";
-import { useEvents } from "@/components/storage/EventsProvider";
+import { Event, useEvents } from "@/components/storage/EventsProvider";
 import { Colors } from "@/constants/theme";
 import { addOpacity } from "@/utils/colors";
+import { formatLocalDate } from "@/utils/dates";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect, useState } from "react";
 import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
 import { HEADER_HEIGHT } from "./_layout";
 //TODO Create scroll Effect
@@ -11,14 +13,33 @@ const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 export default function Eventlist() {
   const { eventList } = useEvents();
+  const [events, setEvents] = useState<Event[]>([]);
 
-  const sortedEvents = eventList ? [...eventList].sort((a, b) => a.date.localeCompare(b.date)) : [];
+  useEffect(() => {
+    if (eventList && eventList.length > 0) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const past: Event[] = [];
+      const upcoming: Event[] = [];
+      const sortedEvents = eventList ? [...eventList].sort((a, b) => a.date.localeCompare(b.date)) : [];
+      for (const event of sortedEvents) {
+        console.log("date on event: ", event.date, "\n", "formated Today: ", formatLocalDate(today));
+        if (event.date < formatLocalDate(today)) {
+          console.log("one is less!");
+          past.push(event);
+        } else {
+          upcoming.push(event);
+        }
+      }
+      setEvents(upcoming.concat(past));
+    }
+  }, [eventList]);
 
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollContainer}>
         <View style={styles.scrollView}>
-          {sortedEvents.map((event, i) => {
+          {events.map((event, i) => {
             return <CountDownListWidget key={event.id} event={event} index={i} />;
           })}
         </View>

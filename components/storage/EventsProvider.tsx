@@ -63,22 +63,6 @@ export function EventsProvider<T extends Event>({ children }: EventsProviderProp
     return await persist({ ...eventMap, [event.id]: newEvent });
   };
 
-  const addSeedEvents = async () => {
-    const currentStorage = await getEventsMap();
-    console.log("[addSeedEvent] current storage length: ", Object.values(currentStorage).length);
-    if (Object.values(currentStorage).length < 1) {
-      console.log("[addSeedEvent] begin seeding...");
-      const newMap: EventMap = {};
-      for (const event of DUMMY_LIST) {
-        newMap[event.id] = event;
-      }
-      setEventMap(newMap);
-      await persist({ ...newMap });
-    } else {
-      console.log("[addSeedEvent] no seeding required");
-    }
-  };
-
   const updateEvent = async (id: number, event: Event) => {
     const current = eventMap[id];
     if (current) {

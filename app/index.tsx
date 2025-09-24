@@ -17,15 +17,7 @@ export default function Eventlist() {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} style={styles.scrollContainer}>
-        <View
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            rowGap: 16,
-            paddingBottom: 80,
-          }}
-        >
+        <View style={styles.scrollView}>
           {sortedEvents.map((event, i) => {
             return <CountDownListWidget key={event.id} event={event} index={i} />;
           })}
@@ -52,6 +44,13 @@ const styles = StyleSheet.create({
   },
   scrollContainer: {
     paddingVertical: 32,
+  },
+  scrollView: {
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    rowGap: 16,
+    paddingBottom: 80,
   },
   fade: {
     position: "absolute",

@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/theme";
 import { parseLocalDateMidnight } from "./dates";
 
 const msPerDay = 24 * 60 * 60 * 1000;
@@ -71,3 +72,30 @@ export function computeDaysLeft(dateString: string, nowDate = new Date()): DaysL
 
   return { hasPassed: false, isToday, days };
 }
+
+export const resolveDateWidgetOptions = (dateData: DaysLeftResult | CountdownResult) => {
+  let status = "future";
+  if (dateData.hasPassed && !dateData.isToday) {
+    status = "past";
+  } else if (dateData.isToday) {
+    status = "today";
+  } else if (dateData.days === 0) {
+    status = "tomorrow";
+  }
+  return status;
+};
+
+export const resolveNumberStyleBasedOnDigits = (daysLeft: number) => {
+  const base = { color: Colors.text, fontSize: 64 };
+  if (daysLeft <= 0) return { ...base, color: Colors.red };
+
+  const digits = daysLeft.toString().length;
+  const sizeMap = [64, 64, 54, 40, 32, 28];
+  const fontSize = sizeMap[Math.min(digits - 1, sizeMap.length - 1)];
+  return { ...base, fontSize };
+};
+
+export const formatDaysLeft = (daysLeft: number) => {
+  const str = daysLeft.toString();
+  return str.length > 4 ? "9999+" : str;
+};

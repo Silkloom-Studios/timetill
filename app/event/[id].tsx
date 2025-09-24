@@ -33,8 +33,10 @@ export default function EventDetail() {
     <View>
       {eventData ? (
         <View>
-          <Title>{eventData.title}</Title>
-          <Title type="subtitle">{eventData.subtitle}</Title>
+          <View style={{ paddingBottom: 36 }}>
+            <Title>{eventData.title}</Title>
+            <Title type="subtitle">{eventData.subtitle}</Title>
+          </View>
           <Countdown date={eventData.date} />
         </View>
       ) : null}

@@ -133,7 +133,7 @@ export function useEvents<T extends Event>() {
 const DUMMY_LIST = [
   {
     id: 1,
-    title: "Doctor Appointment + Alice's 30th birthday hell yeah",
+    title: "Doctor Appointment",
     subtitle: "Annual check-up",
     date: "2025-09-23",
     notificationId: null,
@@ -178,7 +178,7 @@ const DUMMY_LIST = [
     id: 2,
     title: "Birthday Party",
     subtitle: "Alice's 30th birthday",
-    date: "2025-09-20",
+    date: "2025-09-24",
     notificationId: null,
   },
   {

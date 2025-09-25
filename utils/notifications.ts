@@ -35,6 +35,10 @@ export async function scheduleEventNotification(event: Event) {
     content: {
       title: "Timetill",
       body: `${event.title} is today.`,
+      data: {
+        screen: "event/[id]",
+        params: { id: event.id },
+      },
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.CALENDAR,

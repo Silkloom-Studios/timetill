@@ -7,7 +7,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect, useState } from "react";
 import { Dimensions, ScrollView, StyleSheet, Text, View } from "react-native";
 import { HEADER_HEIGHT } from "./_layout";
-//TODO Create scroll Effect
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
@@ -30,6 +29,8 @@ export default function Eventlist() {
         }
       }
       setEvents(upcoming.concat(past));
+    } else {
+      setEvents([]);
     }
   }, [eventList]);
 

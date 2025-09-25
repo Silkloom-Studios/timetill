@@ -17,6 +17,8 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
+import * as Notifications from "expo-notifications";
+
 export const HEADER_HEIGHT = 168;
 
 SplashScreen.setOptions({
@@ -48,9 +50,22 @@ export default function RootLayout() {
     }
   }, [loaded]);
 
+  useEffect(() => {
+    const sub = Notifications.addNotificationResponseReceivedListener((response) => {
+      const data = response.notification.request.content.data as any;
+      if (data?.screen === "event/[id]" && data?.params?.id) {
+        router.dismissAll();
+        router.push(`/`);
+      }
+    });
+
+    return () => sub.remove();
+  }, []);
+
   if (!loaded) {
     return null;
   }
+
   return (
     <ThemeProvider value={DefaultTheme}>
       <EventsProvider>
@@ -109,7 +124,6 @@ export default function RootLayout() {
   );
 }
 
-// Custom Header Component
 function CustomHeader({ hasBack = true, children }: { hasBack?: boolean; children?: React.ReactNode }) {
   const router = useRouter();
   return (

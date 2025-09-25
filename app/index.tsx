@@ -23,9 +23,7 @@ export default function Eventlist() {
       const upcoming: Event[] = [];
       const sortedEvents = eventList ? [...eventList].sort((a, b) => a.date.localeCompare(b.date)) : [];
       for (const event of sortedEvents) {
-        console.log("date on event: ", event.date, "\n", "formated Today: ", formatLocalDate(today));
         if (event.date < formatLocalDate(today)) {
-          console.log("one is less!");
           past.push(event);
         } else {
           upcoming.push(event);

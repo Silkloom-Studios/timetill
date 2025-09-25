@@ -32,7 +32,10 @@ export function EventsProvider<T extends Event>({ children }: EventsProviderProp
   const [eventMap, setEventMap] = useState<EventMap>({});
 
   useEffect(() => {
-    getEventsMap();
+    (async () => {
+      const asyncMap = await getEventsMap();
+      setEventMap(asyncMap);
+    })();
   }, []);
 
   // useEffect(() => {

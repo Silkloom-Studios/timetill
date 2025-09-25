@@ -1,4 +1,3 @@
-// 1. Configure how notifications are displayed when the app is foregrounded
 import { Event } from "@/components/storage/EventsProvider";
 import * as Notifications from "expo-notifications";
 import { buildLocalDate } from "./dates";

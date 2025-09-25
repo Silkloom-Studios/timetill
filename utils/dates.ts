@@ -7,7 +7,7 @@ export function formatLocalDate(date: Date) {
 
 export function parseLocalDate(dateStr: string) {
   const [year, month, day] = dateStr.split("-").map(Number);
-  return new Date(year, month - 1, day, 12, 0, 0); // noon local time
+  return new Date(year, month - 1, day, 12, 0, 0);
 }
 
 export function parseLocalDateMidnight(dateString: string): Date {

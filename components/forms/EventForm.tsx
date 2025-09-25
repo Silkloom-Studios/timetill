@@ -141,7 +141,6 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
               }}
               value={formData.title}
               maxLength={MAX_TITLE_CHARS}
-              // placeholder="Event title"
             />
             <Text style={styles.inputSubText}>{MAX_TITLE_CHARS} chars Max</Text>
           </View>
@@ -154,7 +153,6 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
               }}
               value={formData.subtitle}
               maxLength={MAX_SUBTITLE_CHARS}
-              // placeholder="subtitle"
             />
             <Text style={styles.inputSubText}>{MAX_SUBTITLE_CHARS} chars Max</Text>
           </View>
@@ -167,7 +165,6 @@ export default function EventForm({ date, title, subtitle, id }: EventFormProps)
               display="default"
               onChange={handleDateChange}
               accentColor={Colors.gold}
-              // minimumDate={tomorrow}
             />
           </View>
           {error.error ? (
@@ -219,46 +216,5 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: addOpacity(Colors.red, 80),
-  },
-  //
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  button: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
   },
 });

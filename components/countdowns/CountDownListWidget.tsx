@@ -1,7 +1,8 @@
 import { Colors } from "@/constants/theme";
 import { addOpacity } from "@/utils/colors";
-import { computeDaysLeft } from "@/utils/countdown";
+import { computeDaysLeft, DaysLeftResult } from "@/utils/countdown";
 import { useRouter } from "expo-router";
+import { useEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Event } from "../storage/EventsProvider";
 import resolveListWidgetChips from "./CountdownListWidgetChips";
@@ -12,9 +13,24 @@ interface CountdownListWidgetProps {
   index: number;
 }
 export default function CountDownListWidget({ event, index }: CountdownListWidgetProps) {
+  const [cdData, setCdData] = useState<DaysLeftResult | undefined>();
   const router = useRouter();
-  const dateDetails = computeDaysLeft(event.date);
   const padding = index % 2 === 0 ? { paddingRight: 8 } : { paddingLeft: 8 };
+
+  useEffect(() => {
+    setCdData(computeDaysLeft(event.date));
+
+    const interval = setInterval(() => {
+      setCdData(computeDaysLeft(event.date));
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [event]);
+
+  if (!cdData) {
+    return null;
+  }
+
   return (
     <View style={[styles.container, padding]}>
       <TouchableOpacity
@@ -26,8 +42,8 @@ export default function CountDownListWidget({ event, index }: CountdownListWidge
         }
         style={styles.cardBackground}
       >
-        {resolveListWidgetChips(dateDetails)}
-        <CountdownWidgetPanel number={dateDetails.days} text={"DAYS"} />
+        {resolveListWidgetChips(cdData)}
+        <CountdownWidgetPanel number={cdData.days} text={"DAYS"} />
       </TouchableOpacity>
       <Text ellipsizeMode="tail" style={styles.cardTitle} numberOfLines={1}>
         {event.title}

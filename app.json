@@ -2,14 +2,14 @@
   "expo": {
     "name": "timetill",
     "slug": "timetill",
-    "version": "1.0.2",
+    "version": "2.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "timetill",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "com.santibo10.timetill",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false

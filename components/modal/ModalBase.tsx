@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/theme";
+import { Colors, Fonts } from "@/constants/theme";
 import { addOpacity } from "@/utils/colors";
 import { StyleSheet, View } from "react-native";
 
@@ -33,5 +33,18 @@ export const modalStyles = StyleSheet.create({
     paddingBottom: 32,
     paddingTop: 40,
     alignItems: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontFamily: Fonts.custom.headings,
+    color: Colors.text,
+  },
+  modalBtnContainer: {
+    width: "100%",
+    paddingTop: 24,
+  },
+  modalBtnTop: {
+    marginBottom: 12,
   },
 });
